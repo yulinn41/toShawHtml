@@ -10,7 +10,6 @@
 snowStorm.snowColor = '#FFFFFF'; // blue-ish snow!?
 snowStorm.flakesMaxActive = 50;  // show more snow on screen at once
 snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
-snowStorm.followMouse = false;
 </script>
     <style>
         html,
@@ -33,7 +32,7 @@ snowStorm.followMouse = false;
             /* 禁止滾動 */
             background-color: #000000;
             /* 預設背景色避免空白 */
-            background-image: url('Big(1920x1080).png');
+            background-image: url('Big_1920x1080.webp');
             /* 預設背景圖片 */
             background-size: cover;
             background-position: center;
@@ -97,6 +96,8 @@ snowStorm.followMouse = false;
             text-align: center;
             margin-bottom: 1rem;
             margin-top: -0.8rem;
+             /* 添加文字陰影 */
+               text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
 
         #drawing-bar {
@@ -154,9 +155,12 @@ snowStorm.followMouse = false;
         .color-button.active {
             opacity: 1;
         }
-
+        #eraser {
+            border: 2px solid #808080;
+            /* 為橡皮擦按鈕添加黃色邊框 */
+        }
         #eraser.active {
-            border: 10px solid rgb(255, 174, 0);
+            border: 10px solid #808080;
             /* 為橡皮擦按鈕添加黃色邊框 */
         }
 
@@ -166,19 +170,21 @@ snowStorm.followMouse = false;
             height: calc(5vw);
             max-width: 120px;
             max-height: 60px;
-            background-color: #900000;
+            background-color: #df5500;
             color: white;
-            font-size: 1rem;
+            font-size: 0.9rem;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            border: 2px solid rgb(255, 255, 255);
         }
 
         .clear-button:hover {
-            background-color: #e13b3b;
+            background-color: #be4622;
+            
         }
         #upload:hover {
-            background-color:  #e13b3b;
+            background-color:  #be4622;
         }
         #canvas-wrapper {
             position: relative;
@@ -193,7 +199,7 @@ snowStorm.followMouse = false;
             /* 最大高度 */
             /* 最大高度 */
             margin: -1rem 0;
-            border: 5px solid #900000;
+            /*order: 2px solid #ffffff;*/
             display: flex;
             justify-content: center;
             align-items: center;
@@ -247,7 +253,7 @@ snowStorm.followMouse = false;
         }
 
         #upload {
-            background-color:  #900000;
+            background-color:  #df5500;
             color: white;
             border: none;
             padding: 15px 25px;
@@ -407,22 +413,26 @@ snowStorm.followMouse = false;
 
 <body>
     <div id="text">
-        <img id="text-img" src="text.png">
+        <img id="text-img" src="text.webp" onerror="this.onerror=null; this.src='text.png';" alt="備用圖片">
+
     </div>
     <p class="subtitle">點亮心願燈籠，迎向美好2025！</p>
 
     <div id="drawing-bar">
         <!-- 選擇顏色按鈕 -->
         <div id="toolbar">
-            <button class="color-button" style="background-color: #000000;" data-color="#000000"></button>
+            <button class="color-button" id="eraser" style="background-color: #FFFFFF;" data-color="#FFFFFF"></button>
+
+            <button class="color-button" style="background-color: #808080;" data-color="#808080"></button>
+
             <button class="color-button" style="background-color: #ec7474;" data-color="#ec7474"></button>
             <button class="color-button" style="background-color: #1d7f8c;" data-color="#1d7f8c"></button>
             <button class="color-button" style="background-color: #b0fcf9;" data-color="#b0fcf9"></button>
             <button class="color-button" style="background-color: #d2a100;" data-color="#d2a100"></button>
             <button class="color-button" style="background-color: #6b2f1c;" data-color="#6b2f1c"></button>
             <button class="color-button" style="background-color: #133f3f;" data-color="#133f3f"></button>
-            <button class="color-button" style="background-color: #808080;" data-color="#808080"></button>
-            <button class="color-button" id="eraser" style="background-color: #FFFFFF;" data-color="#FFFFFF"></button>
+            <button class="color-button" style="background-color: #000000;" data-color="#000000"></button>
+
  <!-- 新增清除按鈕 -->
  <button class="clear-button" id="clear-canvas">重新繪製</button>
         </div>
@@ -430,7 +440,7 @@ snowStorm.followMouse = false;
         <!-- 疊加圖片 -->
         <div id="canvas-wrapper">
             <!-- 疊加圖片 -->
-            <img id="overlay-image" src="pi.png" alt="Overlay Image">
+            <img id="overlay-image" src="BlackBG.png" alt="Overlay Image">
 
             <!-- 繪圖區域 -->
             <canvas id="myCanvas"></canvas>
@@ -449,11 +459,11 @@ snowStorm.followMouse = false;
 function resizeCanvasBackground() {
     const body = document.body;
     if (window.innerWidth <= 768) {
-        body.style.backgroundImage = "url('Small(1080x1920).png')";
+        body.style.backgroundImage = "url('Small_1080x1920 (2).webp')";
     } else if (window.innerWidth <= 1200) {
-        body.style.backgroundImage = "url('Middle(1200x1920).png')";
+        body.style.backgroundImage = "url('Middle_1200x1920 (2).webp')";
     } else {
-        body.style.backgroundImage = "url('Big(1920x1080).png')";
+        body.style.backgroundImage = "url('Big_1920x1080 (2).webp')";
     }
 }
 resizeCanvasBackground();
@@ -533,7 +543,7 @@ function draw(event) {
     ctx.moveTo(lastX, lastY);
     ctx.lineTo(x, y);
     ctx.strokeStyle = currentColor;
-    ctx.lineWidth = currentColor === "#FFFFFF" ? 35 : 30; // 橡皮擦寬度稍大
+    ctx.lineWidth = currentColor === "#000000" ? 25 : 20; // 橡皮擦寬度稍大
     ctx.lineCap = "round";
     ctx.stroke();
 
